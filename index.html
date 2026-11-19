@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zastro Keygen</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Keygen">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0B0C10">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+/* Layout: same near-black and champagne-gold look as the PC keygen. One narrow column: header, three tabs, stacked cards. */
+:root{
+  --bg:#0B0C10; --card:#15171D; --card2:#1C1F26; --line:#262932; --field:#0D0F13; --fieldline:#2E323C;
+  --gold:#D4AF6A; --gold-l:#F0D396; --gold-d:#A6803E; --ink:#18130A;
+  --text:#ECE7DD; --muted:#8B909B; --bad:#E58B7E; --bad-bg:#2A1715; --ok:#9CCB9F;
+  --ui:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif;
+  --mono:ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font:16px/1.4 var(--ui);-webkit-tap-highlight-color:transparent;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono)}
+
+/* monogram */
+.tile{width:40px;height:40px;border-radius:11px;flex:none;display:grid;place-items:center;font-weight:700;font-size:20px;color:var(--ink);
+  background:linear-gradient(135deg,var(--gold-l),var(--gold-d));box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.tile.big{width:72px;height:72px;border-radius:20px;font-size:36px}
+
+/* lock screen */
+.lock{min-height:100vh;min-height:100dvh;display:flex;align-items:center}
+.lockbox{width:100%;max-width:420px;margin:0 auto;display:flex;flex-direction:column;gap:16px;padding-block:32px}
+.lockhead{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+h1{margin:0;font-size:20px;font-weight:650;letter-spacing:.16em;text-transform:uppercase}
+.lockhead p{margin:0;color:var(--muted);font-size:14.5px;max-width:34ch}
+.pin{font-family:var(--mono);font-size:24px;letter-spacing:.4em;text-align:center}
+
+/* header + tabs */
+.top{display:flex;align-items:center;gap:12px;padding-block:14px 14px;position:relative}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,106,.6),transparent)}
+.brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+.brand .t{font-weight:650;font-size:14.5px;letter-spacing:.14em}
+.brand .s{font-size:12.5px;color:var(--muted)}
+.iconbtn{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;color:var(--text)}
+.iconbtn svg{width:20px;height:20px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;padding:3px;background:var(--field);border:1px solid var(--line);border-radius:12px}
+.seg button{border:0;background:none;border-radius:9px;padding:10px 6px;font-weight:600;font-size:14.5px;color:var(--muted)}
+.seg button[aria-selected="true"],.seg button[aria-pressed="true"]{background:var(--card2);color:var(--gold-l);box-shadow:inset 0 0 0 1px rgba(212,175,106,.5)}
+.tabs{margin-top:14px}
+
+main{padding-block:14px 40px}
+.view{display:flex;flex-direction:column;gap:14px}
+
+/* cards and fields */
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.card::before{content:"";position:absolute;left:20px;right:20px;top:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,106,.45),transparent)}
+h2{margin:0;font-size:16px;font-weight:650}
+.field{display:flex;flex-direction:column;gap:7px}
+label,.lbl{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.inp{width:100%;min-width:0;background:var(--field);border:1px solid var(--fieldline);border-radius:12px;padding:13px 14px;font-size:16px;outline:none}
+.inp:focus{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.inp.bad{border-color:var(--bad)}
+.inp.codein{font-family:var(--mono);font-size:22px;letter-spacing:.08em;text-align:center;text-transform:uppercase}
+.hint{font-size:13.5px;color:var(--muted);line-height:1.4}
+.hint.bad{color:var(--bad)} .hint.ok{color:var(--ok)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inline{display:flex;gap:8px}
+.inline .inp{flex:1}
+.ghostbtn{flex:none;border:1px solid var(--fieldline);background:var(--card2);border-radius:12px;padding:0 14px;font-weight:600;font-size:14px;color:var(--muted)}
+
+/* buttons */
+.btn{width:100%;border:0;border-radius:14px;padding:15px 16px;font-weight:700;font-size:16px}
+.btn.primary{background:linear-gradient(180deg,var(--gold-l),var(--gold-d));color:var(--ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.btn.primary:active{filter:brightness(.9)}
+.btn.outline{background:rgba(212,175,106,.06);color:var(--gold);border:1px solid rgba(212,175,106,.65)}
+.btn.outline:active{background:rgba(212,175,106,.18)}
+.btn.sec{background:var(--card2);color:var(--text);border:1px solid var(--fieldline)}
+.btn.small{padding:12px 10px;font-size:14.5px;border-radius:12px}
+.btn.danger{background:var(--bad-bg);color:var(--bad);border:1px solid rgba(229,139,126,.35)}
+.btn.danger.armed{background:var(--bad);color:var(--ink)}
+.link{align-self:center;background:none;border:0;color:var(--gold);font-weight:600;padding:8px}
+.err{background:var(--bad-bg);color:var(--bad);border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.5}
+
+/* result */
+.meta{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin:0;font-size:14px}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0;text-align:right;font-family:var(--mono);font-size:13.5px;overflow-wrap:anywhere}
+.codes,.rgrid{display:flex;flex-direction:column;gap:8px}
+.code{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 10px;width:100%;text-align:left;background:var(--field);border:1px solid var(--fieldline);border-radius:14px;padding:12px 14px}
+.code.main{border-color:rgba(212,175,106,.65)}
+.code .k{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.code .n{font-size:12.5px;color:var(--muted);text-align:right}
+.code .v{grid-column:1/-1;font-family:var(--mono);font-size:23px;font-weight:600;letter-spacing:.06em;color:var(--gold-l)}
+.rrow{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;background:var(--field);border:1px solid var(--fieldline);border-radius:12px;padding:10px 12px;text-align:left}
+.rrow .k{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.rrow .v{font-family:var(--mono);font-size:17px;font-weight:600;letter-spacing:.05em;color:var(--gold-l);white-space:nowrap}
+.copied .n,.copied .k{color:var(--ok)!important}
+.notes{font-size:14px;color:var(--muted);line-height:1.5}
+.notes b{color:var(--text);font-weight:600}
+.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px}
+
+/* history */
+.ev{border-top:1px solid var(--line);padding-block:12px}
+.ev:first-child{border-top:0;padding-top:0}
+.ev:last-child{padding-bottom:0}
+.ev summary{list-style:none;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.ev summary::-webkit-details-marker{display:none}
+.ev .et{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ev .ec{font-weight:650;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev .ed{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.ev .es{font-size:13px;color:var(--muted)}
+.ev[open] .rgrid{margin-top:10px}
+.tag{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--gold);border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:1px 7px;margin-left:4px;white-space:nowrap}
+.empty{color:var(--muted);font-size:14.5px;text-align:center;padding:10px 0}
+.status{display:flex;justify-content:space-between;gap:10px;font-size:14.5px}
+.status b{color:var(--ok);font-weight:600}
+</style>
+</head>
+<body>
+
+<section id="lock" class="lock wrap" hidden>
+  <div class="lockbox">
+    <div class="lockhead">
+      <div class="tile big">Z</div>
+      <h1>Zastro Keygen</h1>
+      <p id="lockSub"></p>
+    </div>
+
+    <form id="setupForm" class="card" hidden autocomplete="off">
+      <div class="field">
+        <label for="sKey">Secret key</label>
+        <div class="inline">
+          <input class="inp" id="sKey" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="SECRET_KEY from MainForm.vb">
+          <button type="button" class="ghostbtn" data-act="peek">Show</button>
+        </div>
+        <div class="hint">Paste it once. It is kept encrypted on this phone and never sent anywhere.</div>
+      </div>
+      <div class="two">
+        <div class="field"><label for="sPin">PIN</label><input class="inp pin" id="sPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>
+        <div class="field"><label for="sPin2">Repeat PIN</label><input class="inp pin" id="sPin2" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>
+      </div>
+      <div class="err" id="setupErr" hidden></div>
+      <button class="btn primary" type="submit" id="setupBtn">Save and unlock</button>
+    </form>
+
+    <form id="unlockForm" class="card" hidden autocomplete="off">
+      <div class="field"><label for="uPin">PIN</label><input class="inp pin" id="uPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>
+      <div class="err" id="unlockErr" hidden></div>
+      <button class="btn primary" type="submit" id="unlockBtn">Unlock</button>
+      <button class="link" type="button" data-act="forgot" id="forgotBtn">Forgot PIN</button>
+    </form>
+
+    <div class="err" id="noCrypto" hidden>This app has to be opened from its https web address (your GitHub Pages link). It can't run from a downloaded file.</div>
+  </div>
+</section>
+
+<div id="app" hidden>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand"><div class="tile">Z</div><div><div class="t">ZASTRO KEYGEN</div><div class="s">Odous licence codes</div></div></div>
+      <button class="iconbtn" data-act="lock" aria-label="Lock now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></button>
+    </header>
+    <nav class="seg tabs" role="tablist">
+      <button role="tab" data-act="tab" data-v="gen" aria-selected="true">Generate</button>
+      <button role="tab" data-act="tab" data-v="hist" aria-selected="false">History</button>
+      <button role="tab" data-act="tab" data-v="sec" aria-selected="false">Security</button>
+    </nav>
+
+    <main>
+      <section class="view" id="v-gen">
+        <div class="card">
+          <div class="field">
+            <label for="mc">Machine code</label>
+            <input class="inp codein" id="mc" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX" enterkeyhint="go">
+            <div class="hint" id="mcHint"></div>
+          </div>
+          <div class="field">
+            <label for="clinic">Clinic</label>
+            <input class="inp" id="clinic" list="clinicList" autocomplete="off" placeholder="Clinic name" enterkeyhint="go">
+            <datalist id="clinicList"></datalist>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="seg" role="group" aria-label="Plan">
+            <button data-act="plan" data-v="m" aria-pressed="true">Monthly</button>
+            <button data-act="plan" data-v="y" aria-pressed="false">Yearly</button>
+          </div>
+          <div class="field">
+            <label for="rn">Renewal no.</label>
+            <input class="inp" id="rn" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="Only for renewals" enterkeyhint="go">
+            <div class="hint">The clinic reads it from Odous: the Renew subscription box, or the bottom of the login screen.</div>
+          </div>
+        </div>
+
+        <button class="btn primary" data-act="generate" id="genBtn">Generate activation codes</button>
+        <button class="btn outline" data-act="renew" id="renewBtn">Issue 12 monthly renewal codes</button>
+
+        <div class="card" id="out" hidden></div>
+      </section>
+
+      <section class="view" id="v-hist" hidden>
+        <div class="card">
+          <h2>Codes issued on this phone</h2>
+          <div class="hint">Copy the new lines and paste them at the bottom of <span class="mono">issued_codes.txt</span> on your PC, so your full record stays in one place.</div>
+          <button class="btn primary" data-act="exportNew" id="expBtn">Copy new lines for the PC log</button>
+          <button class="link" data-act="exportAll">Copy every line instead</button>
+        </div>
+        <input class="inp" id="hq" type="search" placeholder="Search clinic or machine code" autocomplete="off">
+        <div class="card" id="hlist"></div>
+        <button class="btn danger" data-act="clearHist" id="clearHistBtn">Clear history on this phone</button>
+      </section>
+
+      <section class="view" id="v-sec" hidden>
+        <div class="card">
+          <h2>Secret key</h2>
+          <div class="status"><span>Key check</span><b>Matches the Zastro key</b></div>
+          <div class="hint">The app locks itself after 5 minutes in the background. The key and history are stored encrypted with your PIN.</div>
+        </div>
+        <form class="card" id="pinForm" autocomplete="off">
+          <h2>Change PIN</h2>
+          <div class="two">
+            <div class="field"><label for="cp1">New PIN</label><input class="inp pin" id="cp1" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>
+            <div class="field"><label for="cp2">Repeat</label><input class="inp pin" id="cp2" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off"></div>
+          </div>
+          <div class="err" id="pinErr" hidden></div>
+          <button class="btn sec" type="submit">Change PIN</button>
+        </form>
+        <div class="card">
+          <h2>Remove from this phone</h2>
+          <div class="hint">Deletes the secret key and the history from this phone. You would paste the key again to use the app.</div>
+          <button class="btn danger" data-act="wipe" id="wipeBtn">Remove key and history</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+/*CORE-START — mirrors MainForm.vb / LicenseService.cs exactly */
+const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const RENEWAL_BATCH = 12;
+const RENEWALS_PER_YEAR = 12;
+let hmacKey = null;
+
+async function loadHmac(secret) {
+  hmacKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+}
+async function keyFor(seed) {
+  const hash = new Uint8Array(await crypto.subtle.sign("HMAC", hmacKey, new TextEncoder().encode(seed.toUpperCase())));
+  let s = "";
+  for (let i = 0; i < 12; i++) s += ALPHABET[hash[i] % ALPHABET.length];
+  return s.slice(0, 4) + "-" + s.slice(4, 8) + "-" + s.slice(8, 12);
+}
+function normalize(raw) {
+  if (raw == null) return "";
+  return String(raw).trim().toUpperCase().replace(/[^\p{L}\p{Nd}]/gu, "");
+}
+const reverseString = s => [...s].reverse().join("");
+const activationKeyFor       = m => keyFor("ACT|" + normalize(m));
+const yearlyActivationKeyFor = m => keyFor("YACT|" + normalize(m));
+const recoveryKeyFor         = m => keyFor("PWR|" + reverseString(normalize(m)));
+const settingsKeyFor         = m => keyFor("SET|" + normalize(m));
+const renewalKeyFor          = (m, n) => keyFor("RNW|" + normalize(m) + "|" + String(n));
+const yearlyRenewalKeyFor    = (m, n) => keyFor("YRL|" + normalize(m) + "|" + String(n));
+const pretty = m => m.slice(0, 4) + "-" + m.slice(4, 8) + "-" + m.slice(8, 12);
+/*CORE-END*/
+
+const KEY_CHECK = "95ad154c";           // first 8 hex of SHA-256 of the key; catches a wrong paste
+const VAULT = "zastro.keygen.vault", LOGK = "zastro.keygen.log", FAILK = "zastro.keygen.fail";
+const AUTOLOCK_MS = 5 * 60 * 1000;
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const te = new TextEncoder(), td = new TextDecoder();
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+
+let aesKey = null, secret = null, log = [], plan = "m", lastCode = "", lastText = "", hiddenAt = 0, busy = false;
+
+/* ---------- encryption at rest ---------- */
+const b64 = buf => { let s = ""; new Uint8Array(buf).forEach(b => s += String.fromCharCode(b)); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function sha256hex(s) { const h = await crypto.subtle.digest("SHA-256", te.encode(s)); return [...new Uint8Array(h)].map(b => b.toString(16).padStart(2, "0")).join(""); }
+async function deriveAes(pin, salt) {
+  const base = await crypto.subtle.importKey("raw", te.encode(pin), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 250000, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+}
+async function enc(key, str) { const iv = crypto.getRandomValues(new Uint8Array(12)); return { iv: b64(iv), ct: b64(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, te.encode(str))) }; }
+async function dec(key, o) { return td.decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(o.iv) }, key, unb64(o.ct))); }
+const getVault = () => { try { return JSON.parse(store.get(VAULT)); } catch (e) { return null; } };
+async function saveLog() { if (aesKey) store.set(LOGK, JSON.stringify(await enc(aesKey, JSON.stringify(log)))); }
+
+/* ---------- small helpers ---------- */
+const pad2 = n => String(n).padStart(2, "0");
+const fmtIssued = d => `${pad2(d.getDate())} ${MON[d.getMonth()]} ${d.getFullYear()}`;
+const stamp = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+const fmtStamp = s => { const [y, m, d] = s.slice(0, 10).split("-"); return `${+d} ${MON[+m - 1]} ${y}, ${s.slice(11)}`; };
+const kindLabel = k => k.charAt(0) + k.slice(1).toLowerCase();
+const clinicName = () => $("clinic").value.trim() || "(not recorded)";
+function showFormErr(id, msg) { const e = $(id); e.textContent = msg; e.hidden = !msg; }
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+    let ok = false; try { ok = document.execCommand("copy"); } catch (_) {}
+    ta.remove(); return ok;
+  }
+}
+function flash(el, msg) {
+  const t = el.querySelector(".n") || el.querySelector(".k") || el;
+  if (t.dataset.orig == null) t.dataset.orig = t.textContent;
+  t.textContent = msg; el.classList.add("copied");
+  clearTimeout(el._ft); el._ft = setTimeout(() => { t.textContent = t.dataset.orig; delete t.dataset.orig; el.classList.remove("copied"); }, 1300);
+}
+const armed = {};
+function arm(btn, key, label) {
+  if (armed[key]) return true;
+  armed[key] = btn.textContent; btn.textContent = label; btn.classList.add("armed");
+  setTimeout(() => { if (armed[key]) { btn.textContent = armed[key]; btn.classList.remove("armed"); delete armed[key]; } }, 3500);
+  return false;
+}
+function disarm(btn, key) { if (armed[key]) { btn.textContent = armed[key]; btn.classList.remove("armed"); delete armed[key]; } }
+
+/* ---------- lock / unlock ---------- */
+function failState() { try { return JSON.parse(store.get(FAILK)) || { n: 0, until: 0 }; } catch (e) { return { n: 0, until: 0 }; } }
+function lockoutLeft() { return Math.max(0, Math.ceil((failState().until - Date.now()) / 1000)); }
+function recordFail() { const f = failState(); f.n++; if (f.n % 5 === 0) f.until = Date.now() + 30000 * (f.n / 5); store.set(FAILK, JSON.stringify(f)); }
+
+function showLock(mode) {
+  $("app").hidden = true; $("lock").hidden = false;
+  if (!(window.crypto && crypto.subtle)) { $("noCrypto").hidden = false; $("setupForm").hidden = $("unlockForm").hidden = true; $("lockSub").textContent = ""; return; }
+  $("setupForm").hidden = mode !== "setup";
+  $("unlockForm").hidden = mode !== "unlock";
+  $("lockSub").textContent = mode === "setup"
+    ? "One-time setup. Paste the secret key from your PC keygen and choose a PIN."
+    : "Enter your PIN.";
+  showFormErr("setupErr", ""); showFormErr("unlockErr", "");
+  setTimeout(() => (mode === "setup" ? $("sKey") : $("uPin")).focus(), 60);
+}
+
+$("setupForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const s = $("sKey").value.trim().replace(/^"+|"+$/g, ""), p = $("sPin").value, p2 = $("sPin2").value;
+  let err = "";
+  if (!s) err = "Paste the secret key.";
+  else if ((await sha256hex(s)).slice(0, KEY_CHECK.length) !== KEY_CHECK) err = "That is not the Zastro secret key. Copy SECRET_KEY from MainForm.vb exactly, without the quotes.";
+  else if (!/^\d{4,8}$/.test(p)) err = "Choose a PIN of 4 to 8 digits.";
+  else if (p !== p2) err = "The two PINs don't match.";
+  if (err) return showFormErr("setupErr", err);
+  $("setupBtn").disabled = true; $("setupBtn").textContent = "Saving…";
+  try {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const key = await deriveAes(p, salt);
+    const vault = { v: 1, salt: b64(salt), secret: await enc(key, s) };
+    if (!store.set(VAULT, JSON.stringify(vault))) return showFormErr("setupErr", "This phone won't let the app save. Turn off Private Browsing in Safari and try again.");
+    aesKey = key; secret = s; log = [];
+    await saveLog();
+    $("sKey").value = $("sPin").value = $("sPin2").value = "";
+    store.del(FAILK);
+    await enterApp();
+  } finally { $("setupBtn").disabled = false; $("setupBtn").textContent = "Save and unlock"; }
+});
+
+$("unlockForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const wait = lockoutLeft();
+  if (wait > 0) return showFormErr("unlockErr", `Too many wrong PINs. Try again in ${wait} seconds.`);
+  const v = getVault(); if (!v) return showLock("setup");
+  const p = $("uPin").value; if (!p) return;
+  $("unlockBtn").disabled = true; $("unlockBtn").textContent = "Unlocking…";
+  try {
+    const key = await deriveAes(p, unb64(v.salt));
+    secret = await dec(key, v.secret); aesKey = key;
+  } catch (_) {
+    recordFail(); $("uPin").value = "";
+    return showFormErr("unlockErr", "Wrong PIN.");
+  } finally { $("unlockBtn").disabled = false; $("unlockBtn").textContent = "Unlock"; }
+  store.del(FAILK);
+  try { const raw = store.get(LOGK); log = raw ? JSON.parse(await dec(aesKey, JSON.parse(raw))) : []; } catch (_) { log = []; }
+  $("uPin").value = "";
+  await enterApp();
+});
+
+async function enterApp() {
+  await loadHmac(secret);
+  $("lock").hidden = true; $("app").hidden = false;
+  showFormErr("setupErr", ""); showFormErr("unlockErr", "");
+  updateDatalist(); renderHistory(); mcHint(); setTab("gen");
+}
+function lockNow() {
+  aesKey = null; secret = null; hmacKey = null; log = []; lastCode = ""; lastText = "";
+  $("out").hidden = true; $("out").innerHTML = ""; $("hlist").innerHTML = "";
+  $("mc").value = ""; $("clinic").value = ""; $("rn").value = "";
+  showLock(getVault() ? "unlock" : "setup");
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) hiddenAt = Date.now();
+  else if (hiddenAt && secret && Date.now() - hiddenAt > AUTOLOCK_MS) lockNow();
+});
+
+/* ---------- tabs and plan ---------- */
+function setTab(v) {
+  ["gen", "hist", "sec"].forEach(x => $("v-" + x).hidden = x !== v);
+  document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.v === v)));
+  window.scrollTo(0, 0);
+}
+function setPlan(v) {
+  plan = v;
+  document.querySelectorAll('[data-act="plan"]').forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+  $("renewBtn").textContent = v === "y" ? "Issue yearly renewal code" : "Issue 12 monthly renewal codes";
+}
+
+/* ---------- validation (same rules and messages as the PC keygen) ---------- */
+function readMachineCode() {
+  const m = normalize($("mc").value);
+  if (!m) return { err: ["Enter the machine code the customer read out."] };
+  if (m.length !== 12) return { err: ["That does not look like a machine code.", `Expected 12 characters (XXXX-XXXX-XXXX), got ${m.length}.`, "Ask the customer to read it again."] };
+  const bad = [...new Set([...m].filter(c => !ALPHABET.includes(c)))].join("");
+  if (bad) return { err: [`Invalid character(s) in the machine code: ${bad}`, "Codes never contain I, O, 0 or 1.", "Ask the customer to press Copy in the dialog and send it by SMS instead.", "Reading these out over a bad line is unreliable."] };
+  return { code: m };
+}
+function readRenewalNumber() {
+  const raw = $("rn").value.trim();
+  if (!raw) { $("rn").focus(); return { err: ["Enter the RENEWAL NO. first. No code issued.", "", "The clinic reads it from Odous:", "  - Renew subscription box: \"Renewal number: N\"", "  - Login screen, bottom: \"renewal no. N\"", "", "Do not guess. A code made for the wrong number is rejected."] }; }
+  const n = /^\d+$/.test(raw) ? parseInt(raw, 10) : NaN;
+  if (!(n >= 1) || n > 2147483647) { $("rn").focus(); return { err: ["That is not a valid renewal number. Enter a whole number, e.g. 2."] }; }
+  return { n };
+}
+function mcHint() {
+  const n = normalize($("mc").value), h = $("mcHint"), inp = $("mc");
+  h.className = "hint"; inp.classList.remove("bad");
+  if (!n) { h.textContent = "The 12-character code from the clinic's Odous screen."; return; }
+  const bad = [...new Set([...n].filter(c => !ALPHABET.includes(c)))].join("");
+  if (bad) { h.className = "hint bad"; inp.classList.add("bad"); h.textContent = `${bad} never appears in a machine code (no I, O, 0 or 1). Probably misheard.`; return; }
+  if (n.length < 12) { h.textContent = `${n.length} of 12 characters`; return; }
+  if (n.length > 12) { h.className = "hint bad"; inp.classList.add("bad"); h.textContent = `${n.length} characters. A machine code has exactly 12.`; return; }
+  const prev = [...log].reverse().find(e => e.machine === pretty(n));
+  h.className = "hint ok";
+  h.textContent = prev ? `Valid. Issued here before on ${fmtStamp(prev.at)}: ${prev.title}` : "Valid machine code";
+  if (prev && !$("clinic").value && prev.clinic !== "(not recorded)") $("clinic").value = prev.clinic;
+}
+
+/* ---------- output ---------- */
+function showErr(lines) {
+  lastCode = ""; lastText = "";
+  const o = $("out"); o.hidden = false;
+  o.innerHTML = `<div class="err">${lines.map(l => esc(l).replace(/^ +/, m => "&nbsp;".repeat(m.length))).join("<br>")}</div>`;
+  o.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+function showResult(r) {
+  lastCode = r.main[0].code; lastText = r.text;
+  const o = $("out"); o.hidden = false;
+  o.innerHTML = `
+    <dl class="meta">${r.meta.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+    <div class="codes">${r.main.map((c, i) => `<button class="code${i === 0 ? " main" : ""}" data-act="copyCode" data-code="${esc(c.code)}"><span class="k">${esc(c.k)}</span><span class="n">${esc(c.note || "Tap to copy")}</span><span class="v">${esc(c.code)}</span></button>`).join("")}</div>
+    ${r.renewals.length ? `<div class="lbl">${esc(r.renewLabel)}</div><div class="rgrid">${r.renewals.map(c => `<button class="rrow" data-act="copyCode" data-code="${esc(c.code)}"><span class="k">${esc(c.k)}</span><span class="v">${esc(c.code)}</span></button>`).join("")}</div>` : ""}
+    ${r.notes.length ? `<div class="notes">${r.notes.join("<br>")}</div>` : ""}
+    <div class="actions">
+      <button class="btn small primary" data-act="copyMain">Copy code</button>
+      <button class="btn small sec" data-act="copyAll">Copy all</button>
+      ${navigator.share ? `<button class="btn small sec" data-act="share">Share</button>` : ""}
+    </div>`;
+  o.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function addEvent(ev) {
+  log.push({ ...ev, at: stamp(new Date()), exp: false });
+  saveLog(); updateDatalist(); renderHistory();
+}
+
+/* ---------- generate (mirrors btnGenerate_Click) ---------- */
+async function generate() {
+  const r = readMachineCode(); if (r.err) return showErr(r.err);
+  const m = r.code, yearly = plan === "y", clinic = clinicName();
+  const activation = yearly ? await yearlyActivationKeyFor(m) : await activationKeyFor(m);
+  const recovery = await recoveryKeyFor(m), settings = await settingsKeyFor(m);
+  const issued = fmtIssued(new Date());
+  const lines = [
+    `CLINIC       : ${clinic}`, `Machine code : ${pretty(m)}`, `Plan         : ${yearly ? "YEARLY" : "MONTHLY"}`, `Issued       : ${issued}`, "",
+    `Activation   : ${activation}${yearly ? "   (1 year)" : "   (first month)"}`, `Pwd Recovery : ${recovery}`, `Settings     : ${settings}`, "",
+  ];
+  const entries = [[yearly ? "ACTIVATION YEARLY" : "ACTIVATION", activation], ["RECOVERY", recovery], ["SETTINGS", settings]];
+  const renewals = []; let notes = [];
+  if (yearly) {
+    lines.push("The activation code alone gives 12 months.", `Next year, issue a yearly code for renewal number ${RENEWALS_PER_YEAR + 1}.`);
+    notes = ["The activation code alone gives 12 months.", `Next year, issue a yearly code for <b>renewal number ${RENEWALS_PER_YEAR + 1}</b>.`];
+  } else {
+    lines.push("RENEWAL CODES — use in order, one per month:", "");
+    for (let i = 1; i <= RENEWAL_BATCH; i++) {
+      const c = await renewalKeyFor(m, i);
+      lines.push(`  Renewal ${String(i).padStart(2)} : ${c}`);
+      renewals.push({ k: `Renewal ${i}`, code: c }); entries.push([`RENEWAL ${i}`, c]);
+    }
+  }
+  showResult({
+    meta: [["Clinic", clinic], ["Machine code", pretty(m)], ["Plan", yearly ? "Yearly" : "Monthly"], ["Issued", issued]],
+    main: [{ k: "Activation", code: activation, note: yearly ? "1 year" : "first month" }, { k: "Pwd recovery", code: recovery }, { k: "Settings", code: settings }],
+    renewals, renewLabel: "Renewal codes · use in order, one per month", notes, text: lines.join("\n"),
+  });
+  addEvent({ clinic, machine: pretty(m), title: yearly ? "New activation · yearly" : "New activation · monthly, renewals 1–12", entries });
+}
+
+/* ---------- renewals (mirrors btnMoreRenewals_Click) ---------- */
+async function renew() {
+  const r = readMachineCode(); if (r.err) return showErr(r.err);
+  const rn = readRenewalNumber(); if (rn.err) return showErr(rn.err);
+  const m = r.code, n = rn.n, clinic = clinicName(), issued = fmtIssued(new Date());
+  const head = [`CLINIC       : ${clinic}`, `Machine code : ${pretty(m)}`, `Plan         : ${plan === "y" ? "YEARLY" : "MONTHLY"}`, `Issued       : ${issued}`, ""];
+  const meta = [["Clinic", clinic], ["Machine code", pretty(m)], ["Plan", plan === "y" ? "Yearly" : "Monthly"], ["Issued", issued]];
+  if (plan === "y") {
+    const code = await yearlyRenewalKeyFor(m, n);
+    const lines = [...head, `Yearly code  : ${code}   (for renewal number ${n})`, "", "Enter it in the renewal box. Adds 12 months.", `After this, Odous will expect renewal number ${n + RENEWALS_PER_YEAR}.`];
+    showResult({ meta, main: [{ k: "Yearly code", code, note: `renewal no. ${n}` }], renewals: [],
+      notes: ["Enter it in the renewal box. Adds 12 months.", `After this, Odous will expect <b>renewal number ${n + RENEWALS_PER_YEAR}</b>.`], text: lines.join("\n") });
+    addEvent({ clinic, machine: pretty(m), title: `Yearly renewal ${n}`, entries: [[`YEARLY ${n}`, code]] });
+  } else {
+    const last = n + RENEWAL_BATCH - 1;
+    const lines = [...head, `RENEWAL CODES ${n} to ${last} — use in order:`, ""];
+    const renewals = [], entries = [];
+    for (let i = n; i <= last; i++) {
+      const c = await renewalKeyFor(m, i);
+      lines.push(`  Renewal ${String(i).padStart(2)} : ${c}`);
+      renewals.push({ k: `Renewal ${i}`, code: c }); entries.push([`RENEWAL ${i}`, c]);
+    }
+    const first = renewals.shift();
+    showResult({ meta, main: [{ k: `Renewal ${n}`, code: first.code, note: "use this one next" }], renewals,
+      renewLabel: `Then in order, one per month`, notes: [], text: lines.join("\n") });
+    addEvent({ clinic, machine: pretty(m), title: `Renewals ${n}–${last}`, entries });
+  }
+}
+
+/* ---------- history ---------- */
+function updateDatalist() {
+  const names = [...new Set(log.map(e => e.clinic).filter(c => c !== "(not recorded)"))].sort();
+  $("clinicList").innerHTML = names.map(c => `<option value="${esc(c)}"></option>`).join("");
+}
+const tsv = events => events.flatMap(e => e.entries.map(([k, c]) => [e.at, e.clinic, e.machine, k, c].join("\t"))).join("\n") + "\n";
+function renderHistory() {
+  const q = $("hq").value.trim().toLowerCase(), qn = normalize(q);
+  const list = [...log].reverse().filter(e => !q || e.clinic.toLowerCase().includes(q) || (qn && normalize(e.machine).includes(qn)));
+  const pending = log.filter(e => !e.exp).reduce((a, e) => a + e.entries.length, 0);
+  $("expBtn").textContent = pending ? `Copy ${pending} new line${pending > 1 ? "s" : ""} for the PC log` : "PC log is up to date";
+  $("expBtn").disabled = !pending;
+  $("hlist").innerHTML = list.length ? list.map(e => `
+    <details class="ev"><summary>
+      <div class="et"><span class="ec">${esc(e.clinic)}</span><span class="ed">${esc(fmtStamp(e.at))}</span></div>
+      <div class="es">${esc(e.title)} · <span class="mono">${esc(e.machine)}</span>${e.exp ? "" : `<span class="tag">not on PC yet</span>`}</div>
+    </summary><div class="rgrid">${e.entries.map(([k, c]) => `<button class="rrow" data-act="copyCode" data-code="${esc(c)}"><span class="k">${esc(kindLabel(k))}</span><span class="v">${esc(c)}</span></button>`).join("")}</div></details>`).join("")
+    : `<div class="empty">${log.length ? "Nothing matches." : "Codes you issue on this phone will appear here."}</div>`;
+}
+
+/* ---------- clicks ---------- */
+const A = {
+  tab: el => setTab(el.dataset.v),
+  plan: el => setPlan(el.dataset.v),
+  lock: () => lockNow(),
+  peek: el => { const i = $("sKey"); i.type = i.type === "password" ? "text" : "password"; el.textContent = i.type === "password" ? "Show" : "Hide"; },
+  generate: async () => { if (busy) return; busy = true; document.activeElement?.blur(); try { await generate(); } finally { busy = false; } },
+  renew: async () => { if (busy) return; busy = true; document.activeElement?.blur(); try { await renew(); } finally { busy = false; } },
+  copyCode: async el => flash(el, (await copyText(el.dataset.code)) ? "Copied ✓" : "Copy failed"),
+  copyMain: async el => { if (lastCode) el.textContent = (await copyText(lastCode)) ? "Copied ✓" : "Copy failed"; setTimeout(() => el.textContent = "Copy code", 1300); },
+  copyAll: async el => { if (lastText) el.textContent = (await copyText(lastText)) ? "Copied ✓" : "Copy failed"; setTimeout(() => el.textContent = "Copy all", 1300); },
+  share: () => { if (lastText) navigator.share({ text: lastText }).catch(() => {}); },
+  exportNew: async el => {
+    const pend = log.filter(e => !e.exp); if (!pend.length) return;
+    if (await copyText(tsv(pend))) { pend.forEach(e => e.exp = true); await saveLog(); renderHistory(); el.textContent = "Copied. Paste into issued_codes.txt"; setTimeout(renderHistory, 2500); }
+    else el.textContent = "Copy failed";
+  },
+  exportAll: async el => { if (!log.length) return; el.textContent = (await copyText(tsv(log))) ? "Copied every line ✓" : "Copy failed"; setTimeout(() => el.textContent = "Copy every line instead", 1800); },
+  clearHist: async el => {
+    if (!arm(el, "hist", "Tap again to clear the history")) return;
+    disarm(el, "hist"); log = []; await saveLog(); updateDatalist(); renderHistory(); mcHint();
+  },
+  wipe: el => {
+    if (!arm(el, "wipe", "Tap again to remove everything")) return;
+    disarm(el, "wipe"); [VAULT, LOGK, FAILK].forEach(store.del); lockNow();
+  },
+  forgot: el => {
+    if (!arm(el, "forgot", "Tap again to remove the key from this phone")) return;
+    disarm(el, "forgot"); [VAULT, LOGK, FAILK].forEach(store.del); showLock("setup");
+  },
+};
+document.addEventListener("click", e => { const el = e.target.closest("[data-act]"); if (el && A[el.dataset.act]) { e.preventDefault(); A[el.dataset.act](el); } });
+
+$("pinForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const p = $("cp1").value, p2 = $("cp2").value;
+  if (!/^\d{4,8}$/.test(p)) return showFormErr("pinErr", "Choose a PIN of 4 to 8 digits.");
+  if (p !== p2) return showFormErr("pinErr", "The two PINs don't match.");
+  showFormErr("pinErr", "");
+  const salt = crypto.getRandomValues(new Uint8Array(16)), key = await deriveAes(p, salt);
+  store.set(VAULT, JSON.stringify({ v: 1, salt: b64(salt), secret: await enc(key, secret) }));
+  aesKey = key; await saveLog();
+  $("cp1").value = $("cp2").value = "";
+  const b = e.target.querySelector("button"); b.textContent = "PIN changed ✓"; setTimeout(() => b.textContent = "Change PIN", 1800);
+});
+
+/* ---------- inputs ---------- */
+$("mc").addEventListener("input", () => {
+  const n = normalize($("mc").value).slice(0, 16);
+  const f = (n.match(/.{1,4}/g) || []).join("-");
+  if ($("mc").value !== f) $("mc").value = f;
+  mcHint();
+});
+$("rn").addEventListener("input", () => { const v = $("rn").value.replace(/\D/g, ""); if (v !== $("rn").value) $("rn").value = v; });
+$("hq").addEventListener("input", renderHistory);
+["mc", "clinic"].forEach(id => $(id).addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); A.generate(); } }));
+$("rn").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); A.renew(); } });
+
+/* ---------- start ---------- */
+setPlan("m");
+showLock(getVault() ? "unlock" : "setup");
+if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
+})();
+</script>
+</body>
+</html>
