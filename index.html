@@ -28,7 +28,7 @@
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font:16px/1.4 var(--ui);-webkit-tap-highlight-color:transparent;
   padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-button,input{font:inherit;color:inherit}
+button,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.5;cursor:default}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
@@ -127,6 +127,34 @@ label,.lbl{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:
 .empty{color:var(--muted);font-size:14.5px;text-align:center;padding:10px 0}
 .status{display:flex;justify-content:space-between;gap:10px;font-size:14.5px}
 .status b{color:var(--ok);font-weight:600}
+
+/* clients */
+.seg.tabs button{font-size:14px;padding:10px 2px}
+a.btn{display:block;text-align:center;text-decoration:none}
+label.btn{display:block;text-align:center;text-transform:none;letter-spacing:0;font-size:16px;font-weight:700;color:var(--text)}
+input[type="date"].inp{-webkit-appearance:none;appearance:none;min-height:50px;min-width:0;max-width:100%;display:block}
+.two>.field{min-width:0}
+textarea.inp{min-height:90px;resize:vertical;font-size:15px;line-height:1.4}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:13px 2px}
+.crow:first-child{border-top:0;padding-top:2px}
+.crow:last-child{padding-bottom:2px}
+.crow .cn{font-weight:650;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crow .cs{grid-column:1;font-size:13px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crow .pills{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.pl{font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 8px;white-space:nowrap;background:var(--card2);color:var(--muted);border:1px solid var(--fieldline)}
+.pl.gold{color:var(--gold-l);border-color:rgba(212,175,106,.5)}
+.pl.bad{color:var(--bad);background:var(--bad-bg);border-color:transparent}
+.pl.ok{color:var(--ok)}
+.mach{border:1px solid var(--fieldline);background:var(--field);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.mach .mtop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mach .mc{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:.06em;color:var(--gold-l)}
+.mach .ms{font-size:13.5px;color:var(--muted);line-height:1.55}
+.mach .ms b{color:var(--text);font-weight:600}
+.mach details summary{cursor:pointer;color:var(--gold);font-weight:600;font-size:14px;list-style:none}
+.mach details summary::-webkit-details-marker{display:none}
+.mach details[open] summary{margin-bottom:10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.back{align-self:flex-start;padding:4px 0}
 </style>
 </head>
 <body>
@@ -175,6 +203,7 @@ label,.lbl{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:
     </header>
     <nav class="seg tabs" role="tablist">
       <button role="tab" data-act="tab" data-v="gen" aria-selected="true">Generate</button>
+      <button role="tab" data-act="tab" data-v="cli" aria-selected="false">Clients</button>
       <button role="tab" data-act="tab" data-v="hist" aria-selected="false">History</button>
       <button role="tab" data-act="tab" data-v="sec" aria-selected="false">Security</button>
     </nav>
@@ -212,6 +241,8 @@ label,.lbl{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:
         <div class="card" id="out" hidden></div>
       </section>
 
+      <section class="view" id="v-cli" hidden></section>
+
       <section class="view" id="v-hist" hidden>
         <div class="card">
           <h2>Codes issued on this phone</h2>
@@ -221,6 +252,15 @@ label,.lbl{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:
         </div>
         <input class="inp" id="hq" type="search" placeholder="Search clinic or machine code" autocomplete="off">
         <div class="card" id="hlist"></div>
+        <div class="card">
+          <h2>Import from your PC log</h2>
+          <div class="hint">Brings in the clinics you activated on the PC. Pick <span class="mono">issued_codes.txt</span>, or open it, copy everything and paste it below. Lines already here are skipped.</div>
+          <label class="btn sec" for="impFile">Choose issued_codes.txt</label>
+          <input type="file" id="impFile" accept=".txt,.tsv,text/plain" hidden>
+          <textarea class="inp" id="impText" placeholder="Or paste the lines here" autocomplete="off" spellcheck="false"></textarea>
+          <button class="btn outline" data-act="importLog">Import pasted lines</button>
+          <div class="hint ok" id="impMsg"></div>
+        </div>
         <button class="btn danger" data-act="clearHist" id="clearHistBtn">Clear history on this phone</button>
       </section>
 
@@ -228,7 +268,7 @@ label,.lbl{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:
         <div class="card">
           <h2>Secret key</h2>
           <div class="status"><span>Key check</span><b>Matches the Zastro key</b></div>
-          <div class="hint">The app locks itself after 5 minutes in the background. The key and history are stored encrypted with your PIN.</div>
+          <div class="hint">The app locks itself after 5 minutes in the background. The key, your clients and the history are stored encrypted with your PIN.</div>
         </div>
         <form class="card" id="pinForm" autocomplete="off">
           <h2>Change PIN</h2>
@@ -240,8 +280,22 @@ label,.lbl{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:
           <button class="btn sec" type="submit">Change PIN</button>
         </form>
         <div class="card">
+          <h2>Backup</h2>
+          <div class="hint">Saves your clients and history in a file locked with your current PIN. The secret key is not in it. Keep it in Files, or send it to yourself on WhatsApp.</div>
+          <div class="status"><span>Last backup</span><span id="lastBk">Never</span></div>
+          <button class="btn sec" data-act="backup" id="backupBtn">Save backup file</button>
+          <label class="btn sec" for="rsFile">Restore from a backup file</label>
+          <input type="file" id="rsFile" accept=".json,application/json" hidden>
+          <div class="field" id="rsBox" hidden>
+            <label for="rsPin">PIN you had when that backup was made</label>
+            <input class="inp pin" id="rsPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="off">
+            <button class="btn primary" data-act="restore">Restore</button>
+          </div>
+          <div class="hint" id="rsMsg"></div>
+        </div>
+        <div class="card">
           <h2>Remove from this phone</h2>
-          <div class="hint">Deletes the secret key and the history from this phone. You would paste the key again to use the app.</div>
+          <div class="hint">Deletes the secret key, your clients and the history from this phone. Save a backup first if you want to keep them.</div>
           <button class="btn danger" data-act="wipe" id="wipeBtn">Remove key and history</button>
         </div>
       </section>
@@ -295,7 +349,8 @@ const store = {
   del(k) { try { localStorage.removeItem(k); } catch (e) {} },
 };
 
-let aesKey = null, secret = null, log = [], plan = "m", lastCode = "", lastText = "", hiddenAt = 0, busy = false;
+let aesKey = null, secret = null, log = [], clients = [], meta = {}, plan = "m", lastCode = "", lastText = "", hiddenAt = 0, busy = false;
+let cView = null, cQuery = "", pendingRestore = null;
 
 /* ---------- encryption at rest ---------- */
 const b64 = buf => { let s = ""; new Uint8Array(buf).forEach(b => s += String.fromCharCode(b)); return btoa(s); };
@@ -308,7 +363,7 @@ async function deriveAes(pin, salt) {
 async function enc(key, str) { const iv = crypto.getRandomValues(new Uint8Array(12)); return { iv: b64(iv), ct: b64(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, te.encode(str))) }; }
 async function dec(key, o) { return td.decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(o.iv) }, key, unb64(o.ct))); }
 const getVault = () => { try { return JSON.parse(store.get(VAULT)); } catch (e) { return null; } };
-async function saveLog() { if (aesKey) store.set(LOGK, JSON.stringify(await enc(aesKey, JSON.stringify(log)))); }
+async function saveData() { if (aesKey) store.set(LOGK, JSON.stringify(await enc(aesKey, JSON.stringify({ log, clients, meta })))); }
 
 /* ---------- small helpers ---------- */
 const pad2 = n => String(n).padStart(2, "0");
@@ -376,8 +431,8 @@ $("setupForm").addEventListener("submit", async e => {
     const key = await deriveAes(p, salt);
     const vault = { v: 1, salt: b64(salt), secret: await enc(key, s) };
     if (!store.set(VAULT, JSON.stringify(vault))) return showFormErr("setupErr", "This phone won't let the app save. Turn off Private Browsing in Safari and try again.");
-    aesKey = key; secret = s; log = [];
-    await saveLog();
+    aesKey = key; secret = s; log = []; clients = []; meta = {};
+    await saveData();
     $("sKey").value = $("sPin").value = $("sPin2").value = "";
     store.del(FAILK);
     await enterApp();
@@ -399,7 +454,10 @@ $("unlockForm").addEventListener("submit", async e => {
     return showFormErr("unlockErr", "Wrong PIN.");
   } finally { $("unlockBtn").disabled = false; $("unlockBtn").textContent = "Unlock"; }
   store.del(FAILK);
-  try { const raw = store.get(LOGK); log = raw ? JSON.parse(await dec(aesKey, JSON.parse(raw))) : []; } catch (_) { log = []; }
+  try {
+    const raw = store.get(LOGK), d = raw ? JSON.parse(await dec(aesKey, JSON.parse(raw))) : [];
+    if (Array.isArray(d)) { log = d; clients = []; meta = {}; } else { log = d.log || []; clients = d.clients || []; meta = d.meta || {}; }
+  } catch (_) { log = []; clients = []; meta = {}; }
   $("uPin").value = "";
   await enterApp();
 });
@@ -408,10 +466,13 @@ async function enterApp() {
   await loadHmac(secret);
   $("lock").hidden = true; $("app").hidden = false;
   showFormErr("setupErr", ""); showFormErr("unlockErr", "");
+  cView = null; $("v-cli").innerHTML = "";
   updateDatalist(); renderHistory(); mcHint(); setTab("gen");
 }
 function lockNow() {
-  aesKey = null; secret = null; hmacKey = null; log = []; lastCode = ""; lastText = "";
+  aesKey = null; secret = null; hmacKey = null; log = []; clients = []; meta = {}; lastCode = ""; lastText = "";
+  cView = null; cQuery = ""; pendingRestore = null;
+  $("v-cli").innerHTML = ""; $("rsBox").hidden = true; $("impMsg").textContent = ""; $("rsMsg").textContent = ""; $("impText").value = "";
   $("out").hidden = true; $("out").innerHTML = ""; $("hlist").innerHTML = "";
   $("mc").value = ""; $("clinic").value = ""; $("rn").value = "";
   showLock(getVault() ? "unlock" : "setup");
@@ -423,7 +484,9 @@ document.addEventListener("visibilitychange", () => {
 
 /* ---------- tabs and plan ---------- */
 function setTab(v) {
-  ["gen", "hist", "sec"].forEach(x => $("v-" + x).hidden = x !== v);
+  ["gen", "cli", "hist", "sec"].forEach(x => $("v-" + x).hidden = x !== v);
+  if (v === "cli") renderClients();
+  if (v === "sec") $("lastBk").textContent = meta.lastBackup ? fmtDate(meta.lastBackup) : "Never";
   document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.v === v)));
   window.scrollTo(0, 0);
 }
@@ -457,10 +520,13 @@ function mcHint() {
   if (bad) { h.className = "hint bad"; inp.classList.add("bad"); h.textContent = `${bad} never appears in a machine code (no I, O, 0 or 1). Probably misheard.`; return; }
   if (n.length < 12) { h.textContent = `${n.length} of 12 characters`; return; }
   if (n.length > 12) { h.className = "hint bad"; inp.classList.add("bad"); h.textContent = `${n.length} characters. A machine code has exactly 12.`; return; }
-  const prev = [...log].reverse().find(e => e.machine === pretty(n));
+  const mm = pretty(n), c = clientByMachine(mm);
   h.className = "hint ok";
-  h.textContent = prev ? `Valid. Issued here before on ${fmtStamp(prev.at)}: ${prev.title}` : "Valid machine code";
-  if (prev && !$("clinic").value && prev.clinic !== "(not recorded)") $("clinic").value = prev.clinic;
+  if (c) {
+    const st = machineStats(mm);
+    h.textContent = `Valid. ${clientName(c)}${st.upTo ? ` · codes given up to renewal no. ${st.upTo}` : ""}`;
+    if (!$("clinic").value && c.name) $("clinic").value = c.name;
+  } else h.textContent = "Valid machine code";
 }
 
 /* ---------- output ---------- */
@@ -485,9 +551,10 @@ function showResult(r) {
     </div>`;
   o.scrollIntoView({ behavior: "smooth", block: "start" });
 }
-function addEvent(ev) {
+function addEvent(ev, info) {
   log.push({ ...ev, at: stamp(new Date()), exp: false });
-  saveLog(); updateDatalist(); renderHistory();
+  upsertClient(ev.clinic, ev.machine, info || {});
+  saveData(); updateDatalist(); renderHistory();
 }
 
 /* ---------- generate (mirrors btnGenerate_Click) ---------- */
@@ -519,7 +586,7 @@ async function generate() {
     main: [{ k: "Activation", code: activation, note: yearly ? "1 year" : "first month" }, { k: "Pwd recovery", code: recovery }, { k: "Settings", code: settings }],
     renewals, renewLabel: "Renewal codes · use in order, one per month", notes, text: lines.join("\n"),
   });
-  addEvent({ clinic, machine: pretty(m), title: yearly ? "New activation · yearly" : "New activation · monthly, renewals 1–12", entries });
+  addEvent({ clinic, machine: pretty(m), title: yearly ? "New activation · yearly" : "New activation · monthly, renewals 1–12", entries }, { plan: yearly ? "yearly" : "monthly", activation: true });
 }
 
 /* ---------- renewals (mirrors btnMoreRenewals_Click) ---------- */
@@ -534,7 +601,7 @@ async function renew() {
     const lines = [...head, `Yearly code  : ${code}   (for renewal number ${n})`, "", "Enter it in the renewal box. Adds 12 months.", `After this, Odous will expect renewal number ${n + RENEWALS_PER_YEAR}.`];
     showResult({ meta, main: [{ k: "Yearly code", code, note: `renewal no. ${n}` }], renewals: [],
       notes: ["Enter it in the renewal box. Adds 12 months.", `After this, Odous will expect <b>renewal number ${n + RENEWALS_PER_YEAR}</b>.`], text: lines.join("\n") });
-    addEvent({ clinic, machine: pretty(m), title: `Yearly renewal ${n}`, entries: [[`YEARLY ${n}`, code]] });
+    addEvent({ clinic, machine: pretty(m), title: `Yearly renewal ${n}`, entries: [[`YEARLY ${n}`, code]] }, { plan: "yearly", yearlyRenewal: true });
   } else {
     const last = n + RENEWAL_BATCH - 1;
     const lines = [...head, `RENEWAL CODES ${n} to ${last} — use in order:`, ""];
@@ -547,13 +614,252 @@ async function renew() {
     const first = renewals.shift();
     showResult({ meta, main: [{ k: `Renewal ${n}`, code: first.code, note: "use this one next" }], renewals,
       renewLabel: `Then in order, one per month`, notes: [], text: lines.join("\n") });
-    addEvent({ clinic, machine: pretty(m), title: `Renewals ${n}–${last}`, entries });
+    addEvent({ clinic, machine: pretty(m), title: `Renewals ${n}–${last}`, entries }, { plan: "monthly" });
   }
+}
+
+/* ---------- clients ---------- */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const isoOf = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const today = () => isoOf(new Date());
+const addMonthsIso = (iso, n) => { const d = new Date(iso + "T00:00:00"); d.setMonth(d.getMonth() + n); return isoOf(d); };
+const fmtDate = iso => { if (!iso) return ""; const [y, m, d] = iso.split("-"); return `${+d} ${MON[+m - 1]} ${y}`; };
+const daysUntil = iso => Math.round((new Date(iso + "T00:00:00") - new Date(today() + "T00:00:00")) / 86400000);
+const lc = s => String(s || "").trim().toLowerCase();
+const toInt = v => { const n = parseInt(String(v).replace(/[^\d]/g, ""), 10); return isNaN(n) ? 0 : n; };
+const clientName = c => c.name || "Unnamed clinic";
+const clientByMachine = m => clients.find(c => c.machines.includes(m));
+function checkMachine(raw) {
+  const n = normalize(raw);
+  if (n.length !== 12) return { err: "A machine code has 12 characters (XXXX-XXXX-XXXX)." };
+  const bad = [...new Set([...n].filter(c => !ALPHABET.includes(c)))].join("");
+  if (bad) return { err: `${bad} never appears in a machine code (no I, O, 0 or 1).` };
+  return { m: pretty(n) };
+}
+function waNumber(phone) {
+  let d = String(phone || "").replace(/\D/g, "");
+  if (d.startsWith("00")) d = d.slice(2);
+  if (d.startsWith("0")) d = "92" + d.slice(1);
+  return d.length >= 11 ? d : "";
+}
+function machineStats(machine) {
+  const evs = log.filter(e => e.machine === machine);
+  let upTo = 0, firstAct = "", lastAt = "";
+  evs.forEach(e => {
+    if (!lastAt || e.at > lastAt) lastAt = e.at;
+    e.entries.forEach(([k]) => {
+      let m;
+      if (k.startsWith("ACTIVATION") && (!firstAct || e.at < firstAct)) firstAct = e.at;
+      if (k === "ACTIVATION YEARLY") upTo = Math.max(upTo, RENEWALS_PER_YEAR);
+      else if ((m = k.match(/^RENEWAL (\d+)$/))) upTo = Math.max(upTo, +m[1]);
+      else if ((m = k.match(/^YEARLY (\d+)$/))) upTo = Math.max(upTo, +m[1] + RENEWALS_PER_YEAR - 1);
+    });
+  });
+  return { evs, upTo, firstAct, lastAt };
+}
+function upsertClient(clinic, machine, info) {
+  const named = clinic && clinic !== "(not recorded)";
+  let c = clientByMachine(machine) || (named ? clients.find(x => lc(x.name) === lc(clinic)) : null);
+  if (!c) { c = { id: uid(), name: "", doctor: "", phone: "", town: "", plan: info.plan || "monthly", activatedOn: "", paidUntil: "", fee: 0, notes: "", machines: [], updated: 0 }; clients.push(c); }
+  if (!c.machines.includes(machine)) c.machines.push(machine);
+  if (named && !c.name) c.name = clinic;
+  if (info.plan) c.plan = info.plan;
+  const d = info.date || today();
+  if (info.activation && (!c.activatedOn || d < c.activatedOn)) c.activatedOn = d;
+  if (!info.fromImport) {
+    if (info.activation && !c.paidUntil) c.paidUntil = addMonthsIso(d, info.plan === "yearly" ? 12 : 1);
+    if (info.yearlyRenewal) c.paidUntil = addMonthsIso(c.paidUntil && c.paidUntil > d ? c.paidUntil : d, 12);
+  }
+  c.updated = Date.now();
+  return c;
+}
+function paidState(c) {
+  if (!c.paidUntil) return null;
+  const n = daysUntil(c.paidUntil);
+  if (n < 0) return { cls: "bad", t: `Overdue ${-n}d` };
+  if (n === 0) return { cls: "gold", t: "Due today" };
+  if (n <= 7) return { cls: "gold", t: `Due in ${n}d` };
+  return { cls: "ok", t: `Paid to ${fmtDate(c.paidUntil)}` };
+}
+
+function renderClients() {
+  const v = $("v-cli");
+  if (cView) return renderClientDetail(v);
+  if (!$("clist")) {
+    v.innerHTML = `
+      <div class="inline">
+        <input class="inp" id="cq" type="search" placeholder="Search clinic, doctor, phone, code" autocomplete="off">
+        <button class="btn small primary" data-act="newClient" style="width:auto;flex:none;padding-inline:18px">+ Add</button>
+      </div>
+      <div class="card" id="clist"></div>`;
+    $("cq").value = cQuery;
+  }
+  const q = lc(cQuery), qn = normalize(cQuery);
+  const list = clients.filter(c => !q || lc(c.name).includes(q) || lc(c.doctor).includes(q) || lc(c.town).includes(q)
+      || (c.phone || "").replace(/\D/g, "").includes(q.replace(/\D/g, "") || "\u0000")
+      || (qn.length >= 3 && c.machines.some(m => normalize(m).includes(qn))))
+    .sort((a, b) => lc(clientName(a)).localeCompare(lc(clientName(b))));
+  $("clist").innerHTML = list.length ? list.map(c => {
+    const p = paidState(c);
+    const sub = [c.town, c.doctor, c.machines.length > 1 ? `${c.machines.length} computers` : c.machines[0]].filter(Boolean).join(" · ") || "No details yet";
+    return `<button class="crow" data-act="openClient" data-id="${esc(c.id)}">
+      <span class="cn">${esc(clientName(c))}</span>
+      <span class="pills"><span class="pl gold">${c.plan === "yearly" ? "Yearly" : "Monthly"}</span>${p ? `<span class="pl ${p.cls}">${esc(p.t)}</span>` : ""}</span>
+      <span class="cs">${esc(sub)}</span></button>`;
+  }).join("") : `<div class="empty">${clients.length ? "No clients match." : "Clinics appear here when you generate codes for them. You can also tap + Add, or import your PC log from the History tab."}</div>`;
+}
+
+function renderClientDetail(v) {
+  const isNew = cView === "new";
+  const c = isNew ? { name: "", doctor: "", phone: "", town: "", plan: "monthly", activatedOn: "", paidUntil: "", fee: 0, notes: "", machines: [] } : clients.find(x => x.id === cView);
+  if (!c) { cView = null; v.innerHTML = ""; return renderClients(); }
+  const wa = waNumber(c.phone), tel = String(c.phone || "").replace(/[^\d+]/g, "");
+  v.innerHTML = `
+    <button class="link back" data-act="clientsBack">‹ All clients</button>
+    <form class="card" id="clientForm" autocomplete="off">
+      <h2>${isNew ? "New client" : esc(clientName(c))}</h2>
+      <div class="field"><label for="cName">Clinic name</label><input class="inp" id="cName" value="${esc(c.name)}" placeholder="Clinic name"></div>
+      <div class="two">
+        <div class="field"><label for="cDoc">Doctor</label><input class="inp" id="cDoc" value="${esc(c.doctor)}" placeholder="Dr. …"></div>
+        <div class="field"><label for="cTown">Town</label><input class="inp" id="cTown" value="${esc(c.town)}" placeholder="Mingora"></div>
+      </div>
+      <div class="field"><label for="cPhone">Phone</label><input class="inp" id="cPhone" type="tel" value="${esc(c.phone)}" placeholder="03XX-XXXXXXX"></div>
+      ${!isNew && tel ? `<div class="row2"><a class="btn small sec" href="tel:${esc(tel)}">Call</a>${wa ? `<a class="btn small sec" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>` : ""}</div>` : ""}
+      <div class="field"><span class="lbl">Plan</span>
+        <div class="seg" role="group" aria-label="Plan">
+          <button type="button" data-act="cplan" data-v="monthly" aria-pressed="${c.plan !== "yearly"}">Monthly</button>
+          <button type="button" data-act="cplan" data-v="yearly" aria-pressed="${c.plan === "yearly"}">Yearly</button>
+        </div></div>
+      <div class="two">
+        <div class="field"><label for="cAct">Activated on</label><input class="inp" id="cAct" type="date" value="${esc(c.activatedOn)}"></div>
+        <div class="field"><label for="cPaid">Paid until</label><input class="inp" id="cPaid" type="date" value="${esc(c.paidUntil)}"></div>
+      </div>
+      <div class="field"><label for="cFee">Fee (Rs)</label><input class="inp" id="cFee" inputmode="numeric" value="${c.fee ? esc(c.fee) : ""}" placeholder="Per month or per year"></div>
+      <div class="field"><label for="cNotes">Notes</label><textarea class="inp" id="cNotes" placeholder="Address, payment details, anything worth remembering">${esc(c.notes)}</textarea></div>
+      ${isNew ? `<div class="field"><label for="cMach">Machine code</label><input class="inp codein" id="cMach" placeholder="XXXX-XXXX-XXXX" autocapitalize="characters" autocorrect="off" spellcheck="false"><div class="hint">Optional. You can add it later.</div></div>` : ""}
+      <div class="err" id="cErr" hidden></div>
+      <button class="btn primary" type="submit" id="cSave">${isNew ? "Add client" : "Save changes"}</button>
+    </form>
+    ${isNew ? "" : machinesHTML(c)}
+    ${isNew ? "" : `<button class="btn danger" data-act="delClient">Delete this client</button><div class="hint" style="text-align:center">The codes stay in History.</div>`}`;
+}
+
+function machinesHTML(c) {
+  const blocks = c.machines.map(m => {
+    const st = machineStats(m);
+    const ents = [...st.evs].reverse().flatMap(e => e.entries);
+    const lines = [
+      st.firstAct ? `Activated <b>${esc(fmtStamp(st.firstAct).split(",")[0])}</b>` : "",
+      st.upTo ? `Codes given up to <b>renewal no. ${st.upTo}</b>` : "",
+      st.lastAt ? `Last codes ${esc(fmtStamp(st.lastAt))}` : "No codes on record for this computer yet",
+    ].filter(Boolean).join("<br>");
+    return `<div class="mach">
+      <div class="mtop"><span class="mc">${esc(m)}</span><button class="ghostbtn" style="height:38px" data-act="copyCode" data-code="${esc(m)}">Copy</button></div>
+      <div class="ms">${lines}</div>
+      <div class="row2"><button class="btn small primary" data-act="codesFor" data-m="${esc(m)}">New codes</button><button class="btn small sec" data-act="removeMachine" data-m="${esc(m)}">Remove</button></div>
+      ${ents.length ? `<details><summary>Show all ${ents.length} codes</summary><div class="rgrid">${ents.map(([k, code]) => `<button class="rrow" data-act="copyCode" data-code="${esc(code)}"><span class="k">${esc(kindLabel(k))}</span><span class="v">${esc(code)}</span></button>`).join("")}</div></details>` : ""}
+    </div>`;
+  }).join("");
+  return `<div class="card"><h2>Computers</h2>
+    ${blocks || `<div class="empty">No machine code yet.</div>`}
+    <div class="inline"><input class="inp" id="addMach" placeholder="Add a machine code" autocapitalize="characters" autocorrect="off" spellcheck="false" style="font-family:var(--mono)"><button class="ghostbtn" data-act="addMachine">Add</button></div>
+    <div class="hint" id="machMsg">A clinic with two computers, or a reinstalled Windows, gets a second machine code.</div>
+  </div>`;
+}
+
+async function saveClientForm() {
+  const isNew = cView === "new";
+  const name = $("cName").value.trim();
+  if (!name) return showFormErr("cErr", "Enter the clinic name.");
+  const dup = clients.find(x => x.id !== cView && lc(x.name) === lc(name));
+  if (dup) return showFormErr("cErr", `${dup.name} is already in your clients. Open it from the list instead.`);
+  let mach = "";
+  if (isNew && $("cMach").value.trim()) {
+    const r = checkMachine($("cMach").value); if (r.err) return showFormErr("cErr", r.err);
+    const o = clientByMachine(r.m); if (o) return showFormErr("cErr", `That machine code already belongs to ${clientName(o)}.`);
+    mach = r.m;
+  }
+  const plan = document.querySelector('#clientForm [data-act="cplan"][aria-pressed="true"]')?.dataset.v || "monthly";
+  const c = isNew ? { id: uid(), machines: [] } : clients.find(x => x.id === cView);
+  Object.assign(c, { name, doctor: $("cDoc").value.trim(), phone: $("cPhone").value.trim(), town: $("cTown").value.trim(), plan,
+    activatedOn: $("cAct").value, paidUntil: $("cPaid").value, fee: toInt($("cFee").value), notes: $("cNotes").value.trim(), updated: Date.now() });
+  if (mach) c.machines.push(mach);
+  if (isNew) { clients.push(c); cView = c.id; }
+  await saveData(); updateDatalist(); renderClients();
+  const b = $("cSave"); if (b) { b.textContent = "Saved ✓"; setTimeout(() => { if ($("cSave")) $("cSave").textContent = "Save changes"; }, 1500); }
+}
+
+/* ---------- import from the PC log ---------- */
+function titleFor(entries) {
+  const ks = entries.map(e => e[0]);
+  if (ks.includes("ACTIVATION YEARLY")) return "New activation · yearly";
+  if (ks.includes("ACTIVATION")) return "New activation · monthly";
+  const rn = ks.map(k => k.match(/^RENEWAL (\d+)$/)).filter(Boolean).map(m => +m[1]);
+  if (rn.length) return rn.length > 1 ? `Renewals ${Math.min(...rn)}–${Math.max(...rn)}` : `Renewal ${rn[0]}`;
+  const y = ks.map(k => k.match(/^YEARLY (\d+)$/)).find(Boolean);
+  if (y) return `Yearly renewal ${y[1]}`;
+  return kindLabel(ks[0]);
+}
+function importLines(text) {
+  const have = new Set(log.flatMap(e => e.entries.map(([k, c]) => `${e.machine}|${k}|${c}`)));
+  const groups = new Map(); let added = 0, skipped = 0, bad = 0;
+  text.split(/\r?\n/).forEach(line => {
+    if (!line.trim()) return;
+    const p = line.split("\t").map(x => x.trim());
+    if (p[0] === "DateIssued") return;
+    if (p.length < 5 || !/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(p[0]) || !p[3] || !p[4]) { bad++; return; }
+    const [at, clinic, mraw, kind, code] = p;
+    const r = checkMachine(mraw); if (r.err) { bad++; return; }
+    const key = `${r.m}|${kind}|${code}`;
+    if (have.has(key)) { skipped++; return; }
+    have.add(key);
+    const gk = `${at}|${r.m}|${clinic}`;
+    if (!groups.has(gk)) groups.set(gk, { at, clinic: clinic || "(not recorded)", machine: r.m, entries: [], exp: true });
+    groups.get(gk).entries.push([kind, code]); added++;
+  });
+  const evs = [...groups.values()].map(e => ({ ...e, title: titleFor(e.entries) })).sort((a, b) => a.at.localeCompare(b.at));
+  log.push(...evs); log.sort((a, b) => a.at.localeCompare(b.at));
+  evs.forEach(e => {
+    const ks = e.entries.map(x => x[0]);
+    upsertClient(e.clinic, e.machine, { plan: ks.some(k => k.includes("YEARLY")) ? "yearly" : "monthly", activation: ks.some(k => k.startsWith("ACTIVATION")), date: e.at.slice(0, 10), fromImport: true });
+  });
+  return { added, skipped, bad, computers: new Set(evs.map(e => e.machine)).size };
+}
+async function doImport(text) {
+  const r = importLines(text);
+  await saveData(); updateDatalist(); renderHistory();
+  const parts = [r.added ? `Imported ${r.added} code${r.added > 1 ? "s" : ""} for ${r.computers} computer${r.computers > 1 ? "s" : ""}. They are now under Clients.` : "Nothing new to import."];
+  if (r.skipped) parts.push(`${r.skipped} already here.`);
+  if (r.bad) parts.push(`${r.bad} line${r.bad > 1 ? "s" : ""} not recognised.`);
+  $("impMsg").textContent = parts.join(" ");
+  $("impText").value = "";
+}
+
+/* ---------- backup ---------- */
+function mergeData(d) {
+  let nc = 0, ne = 0;
+  (d.clients || []).forEach(x => {
+    const mine = clients.find(c => c.id === x.id);
+    if (!mine) { clients.push(x); nc++; } else if ((x.updated || 0) > (mine.updated || 0)) Object.assign(mine, x);
+  });
+  const key = e => `${e.at}|${e.machine}|${e.entries.map(x => x[1]).join(",")}`;
+  const have = new Set(log.map(key));
+  (d.log || []).forEach(e => { if (!have.has(key(e))) { log.push(e); have.add(key(e)); ne++; } });
+  log.sort((a, b) => a.at.localeCompare(b.at));
+  return { nc, ne };
+}
+function saveFile(name, text) {
+  const blob = new Blob([text], { type: "application/json" });
+  const download = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); return true; };
+  let file = null; try { file = new File([blob], name, { type: "application/json" }); } catch (e) {}
+  if (file && navigator.canShare && navigator.canShare({ files: [file] }))
+    return navigator.share({ files: [file], title: name }).then(() => true, err => err && err.name === "AbortError" ? false : download());
+  return Promise.resolve(download());
 }
 
 /* ---------- history ---------- */
 function updateDatalist() {
-  const names = [...new Set(log.map(e => e.clinic).filter(c => c !== "(not recorded)"))].sort();
+  const names = [...new Set([...clients.map(c => c.name), ...log.map(e => e.clinic)].filter(c => c && c !== "(not recorded)"))].sort();
   $("clinicList").innerHTML = names.map(c => `<option value="${esc(c)}"></option>`).join("");
 }
 const tsv = events => events.flatMap(e => e.entries.map(([k, c]) => [e.at, e.clinic, e.machine, k, c].join("\t"))).join("\n") + "\n";
@@ -585,20 +891,71 @@ const A = {
   share: () => { if (lastText) navigator.share({ text: lastText }).catch(() => {}); },
   exportNew: async el => {
     const pend = log.filter(e => !e.exp); if (!pend.length) return;
-    if (await copyText(tsv(pend))) { pend.forEach(e => e.exp = true); await saveLog(); renderHistory(); el.textContent = "Copied. Paste into issued_codes.txt"; setTimeout(renderHistory, 2500); }
+    if (await copyText(tsv(pend))) { pend.forEach(e => e.exp = true); await saveData(); renderHistory(); el.textContent = "Copied. Paste into issued_codes.txt"; setTimeout(renderHistory, 2500); }
     else el.textContent = "Copy failed";
   },
   exportAll: async el => { if (!log.length) return; el.textContent = (await copyText(tsv(log))) ? "Copied every line ✓" : "Copy failed"; setTimeout(() => el.textContent = "Copy every line instead", 1800); },
+  openClient: el => { cView = el.dataset.id; renderClients(); window.scrollTo(0, 0); },
+  newClient: () => { cView = "new"; renderClients(); window.scrollTo(0, 0); },
+  clientsBack: () => { cView = null; $("v-cli").innerHTML = ""; renderClients(); window.scrollTo(0, 0); },
+  cplan: el => el.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === el))),
+  codesFor: el => {
+    const c = clients.find(x => x.id === cView);
+    setTab("gen");
+    $("mc").value = el.dataset.m; $("clinic").value = c && c.name ? c.name : ""; $("rn").value = "";
+    setPlan(c && c.plan === "yearly" ? "y" : "m");
+    $("out").hidden = true; mcHint();
+  },
+  addMachine: async () => {
+    const c = clients.find(x => x.id === cView), r = checkMachine($("addMach").value), msg = $("machMsg");
+    if (r.err) { msg.className = "hint bad"; msg.textContent = r.err; return; }
+    const o = clientByMachine(r.m);
+    if (o) { msg.className = "hint bad"; msg.textContent = o === c ? "This computer is already listed." : `That machine code belongs to ${clientName(o)}.`; return; }
+    c.machines.push(r.m); c.updated = Date.now(); await saveData(); renderClients();
+  },
+  removeMachine: async el => {
+    if (!arm(el, "rm" + el.dataset.m, "Tap again")) return;
+    disarm(el, "rm" + el.dataset.m);
+    const c = clients.find(x => x.id === cView);
+    c.machines = c.machines.filter(m => m !== el.dataset.m); c.updated = Date.now(); await saveData(); renderClients();
+  },
+  delClient: async el => {
+    if (!arm(el, "delc", "Tap again to delete this client")) return;
+    disarm(el, "delc");
+    clients = clients.filter(x => x.id !== cView); cView = null; $("v-cli").innerHTML = "";
+    await saveData(); updateDatalist(); renderClients();
+  },
+  importLog: async () => { const t = $("impText").value; if (t.trim()) await doImport(t); },
+  backup: async el => {
+    const v = getVault(); if (!v || !aesKey) return;
+    const payload = JSON.stringify({ app: "zastro-keygen-backup", v: 1, salt: v.salt, data: await enc(aesKey, JSON.stringify({ log, clients })) });
+    if (await saveFile(`Zastro-keygen-backup-${today()}.json`, payload)) {
+      meta.lastBackup = today(); await saveData();
+      $("lastBk").textContent = fmtDate(meta.lastBackup); el.textContent = "Backup saved ✓"; setTimeout(() => el.textContent = "Save backup file", 1800);
+    }
+  },
+  restore: async () => {
+    if (!pendingRestore) return;
+    const msg = $("rsMsg");
+    try {
+      const key = await deriveAes($("rsPin").value, unb64(pendingRestore.salt));
+      const d = JSON.parse(await dec(key, pendingRestore.data));
+      const r = mergeData(d);
+      await saveData(); updateDatalist(); renderHistory(); mcHint();
+      pendingRestore = null; $("rsBox").hidden = true; $("rsPin").value = "";
+      msg.className = "hint ok"; msg.textContent = `Restored. Added ${r.nc} client${r.nc === 1 ? "" : "s"} and ${r.ne} batch${r.ne === 1 ? "" : "es"} of codes. Nothing already here was removed.`;
+    } catch (e) { msg.className = "hint bad"; msg.textContent = "Wrong PIN for that backup. Use the PIN you had when you saved it."; $("rsPin").value = ""; }
+  },
   clearHist: async el => {
     if (!arm(el, "hist", "Tap again to clear the history")) return;
-    disarm(el, "hist"); log = []; await saveLog(); updateDatalist(); renderHistory(); mcHint();
+    disarm(el, "hist"); log = []; await saveData(); updateDatalist(); renderHistory(); mcHint();
   },
   wipe: el => {
     if (!arm(el, "wipe", "Tap again to remove everything")) return;
     disarm(el, "wipe"); [VAULT, LOGK, FAILK].forEach(store.del); lockNow();
   },
   forgot: el => {
-    if (!arm(el, "forgot", "Tap again to remove the key from this phone")) return;
+    if (!arm(el, "forgot", "Tap again to erase the key and all data")) return;
     disarm(el, "forgot"); [VAULT, LOGK, FAILK].forEach(store.del); showLock("setup");
   },
 };
@@ -612,7 +969,7 @@ $("pinForm").addEventListener("submit", async e => {
   showFormErr("pinErr", "");
   const salt = crypto.getRandomValues(new Uint8Array(16)), key = await deriveAes(p, salt);
   store.set(VAULT, JSON.stringify({ v: 1, salt: b64(salt), secret: await enc(key, secret) }));
-  aesKey = key; await saveLog();
+  aesKey = key; await saveData();
   $("cp1").value = $("cp2").value = "";
   const b = e.target.querySelector("button"); b.textContent = "PIN changed ✓"; setTimeout(() => b.textContent = "Change PIN", 1800);
 });
@@ -626,6 +983,21 @@ $("mc").addEventListener("input", () => {
 });
 $("rn").addEventListener("input", () => { const v = $("rn").value.replace(/\D/g, ""); if (v !== $("rn").value) $("rn").value = v; });
 $("hq").addEventListener("input", renderHistory);
+document.addEventListener("input", e => { if (e.target.id === "cq") { cQuery = e.target.value; renderClients(); } });
+document.addEventListener("submit", e => { if (e.target.id === "clientForm") { e.preventDefault(); saveClientForm(); } });
+$("impFile").addEventListener("change", e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (f) f.text().then(doImport).catch(() => { $("impMsg").textContent = "Couldn't read that file."; });
+});
+$("rsFile").addEventListener("change", e => {
+  const f = e.target.files[0]; e.target.value = ""; const msg = $("rsMsg");
+  if (!f) return;
+  f.text().then(t => {
+    const o = JSON.parse(t);
+    if (o.app !== "zastro-keygen-backup" || !o.salt || !o.data) throw 0;
+    pendingRestore = o; $("rsBox").hidden = false; msg.className = "hint"; msg.textContent = "Backup file loaded. Enter its PIN to restore."; $("rsPin").focus();
+  }).catch(() => { msg.className = "hint bad"; msg.textContent = "That isn't a Zastro Keygen backup file."; });
+});
 ["mc", "clinic"].forEach(id => $(id).addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); A.generate(); } }));
 $("rn").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); A.renew(); } });
 
